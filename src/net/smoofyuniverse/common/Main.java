@@ -95,9 +95,13 @@ public class Main {
 	}
 
 	public static Class<?> getApplicationClass() throws IOException, ClassNotFoundException {
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(Main.class.getResourceAsStream("/application.main")))) {
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("/application.main")));
 			return Main.class.getClassLoader().loadClass(in.readLine());
+		} finally {
+			if (in != null)
+				in.close();
 		}
 	}
 
