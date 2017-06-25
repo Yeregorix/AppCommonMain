@@ -21,20 +21,14 @@
  ******************************************************************************/
 package net.smoofyuniverse.common;
 
-import java.awt.Color;
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 public class Main {
 	public static final String REQUIRED_VERSION = "1.8.0_101"; // 1.8.0_40 JavaFX Dialogs, 1.8.0_101 Let's Encrypt compatibility
@@ -87,8 +81,7 @@ public class Main {
 				// of a less significant version part couldn't as easily outweight the
 				// more significant version parts.
 				value += part * Math.pow(10, versionParts.length - (i - 1) * 3);
-			} catch (NumberFormatException e) {
-				continue;
+			} catch (NumberFormatException ignored) {
 			}
 		}
 		return value;
@@ -125,7 +118,8 @@ public class Main {
 					if (ev.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 						try {
 							Desktop.getDesktop().browse(ev.getURL().toURI());
-						} catch (Exception e) {}
+						} catch (Exception ignored) {
+						}
 					}
 				}
 			});
