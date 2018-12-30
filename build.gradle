@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+    id 'maven'
+}
+
+group 'net.smoofyuniverse'
+version '1.0.0'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+compileJava.options.encoding = 'UTF-8'
