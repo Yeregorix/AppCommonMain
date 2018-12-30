@@ -133,12 +133,10 @@ public class Main {
 			Font font = label.getFont();
 			Color color = label.getBackground();
 
-			StringBuilder style = new StringBuilder();
-			style.append("font-family:" + font.getFamily() + ";");
-			style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
-			style.append("font-size:" + font.getSize() + "pt;");
-			style.append("background-color: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ");");
-			return style.toString();
+			return "font-family:" + font.getFamily() + ";" +
+					"font-weight:" + (font.isBold() ? "bold" : "normal") + ";" +
+					"font-size:" + font.getSize() + "pt;" +
+					"background-color: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ");";
 		}
 	}
 }
