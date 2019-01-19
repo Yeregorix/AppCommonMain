@@ -61,6 +61,7 @@ public class Main {
 		return System.getProperty("java.version");
 	}
 
+	// https://github.com/SpongePowered/SpongeCommon/blob/stable-7/src/java6/java/org/spongepowered/launch/JavaVersionCheckUtils.java
 	public static double getVersionValue(String version) {
 		// Get rid of any dashes, such as those in early access versions which have "-ea" on the end of the version
 		int i = version.indexOf('-');
