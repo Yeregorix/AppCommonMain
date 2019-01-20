@@ -23,12 +23,76 @@
 plugins {
     id 'java'
     id 'maven'
+    id 'signing'
 }
 
 group 'net.smoofyuniverse'
-version '1.0.0'
+archivesBaseName = 'appcommon-main'
+version '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
 compileJava.options.encoding = 'UTF-8'
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'AppCommonMain'
+                packaging 'jar'
+                description 'AppCommon\'s Java 6 Main.'
+                url 'https://github.com/Yeregorix/AppCommonMain'
+
+                scm {
+                    connection 'scm:git:https://github.com/Yeregorix/AppCommonMain.git'
+                    developerConnection 'scm:git:https://github.com/Yeregorix/AppCommonMain.git'
+                    url 'https://github.com/Yeregorix/AppCommonMain'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'Yeregorix'
+                        name 'Hugo Dupanloup'
+                        email 'yeregorix@smoofyuniverse.net'
+                    }
+                }
+            }
+        }
+    }
+}
