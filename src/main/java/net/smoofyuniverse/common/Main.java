@@ -33,15 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 	public static final String REQUIRED_VERSION = "1.8.0_101"; // 1.8.0_40 JavaFX Dialogs, 1.8.0_101 Let's Encrypt compatibility
-
-	public static final String ERROR_MESSAGE = "La version de votre environnement d'éxecution (%s) n'est pas à jour.\n"
-			+ "Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.\n"
-			+ "Vous pouvez la télécharger depuis le site d'Oracle:\n"
-			+ "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html";
-	
-	public static final String FORMATTED_ERROR_MESSAGE = "<br>La version de votre environnement d'éxecution (%s) n'est pas à jour.</br>"
-			+ "<br>Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.</br>"
-			+ "<br>Vous pouvez la télécharger depuis <a href=\"http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html\">le site d'Oracle</a>.</br>";
+	public static String ERROR_MESSAGE, FORMATTED_ERROR_MESSAGE;
 
 	public static void main(String[] args) throws Throwable {
 		ensureRequiredVersion();
@@ -51,6 +43,7 @@ public class Main {
 	public static void ensureRequiredVersion() {
 		String version = getCurrentVersion();
 		if (getVersionValue(version) < getVersionValue(REQUIRED_VERSION)) {
+			loadLanguage();
 			if (!GraphicsEnvironment.isHeadless())
 				JOptionPane.showMessageDialog(null, new MessageWithLink(String.format(FORMATTED_ERROR_MESSAGE, version, REQUIRED_VERSION)), "JRE invalide", JOptionPane.ERROR_MESSAGE);
 			throw new RuntimeException(String.format(ERROR_MESSAGE, version, REQUIRED_VERSION));
@@ -87,6 +80,28 @@ public class Main {
 			}
 		}
 		return value;
+	}
+
+	public static void loadLanguage() {
+		if ("fr".equals(System.getProperty("user.language"))) {
+			ERROR_MESSAGE = "La version de votre environnement d'éxecution (%s) n'est pas à jour.\n"
+					+ "Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.\n"
+					+ "Vous pouvez la télécharger depuis le site d'Oracle:\n"
+					+ "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html";
+
+			FORMATTED_ERROR_MESSAGE = "<br>La version de votre environnement d'éxecution (%s) n'est pas à jour.</br>"
+					+ "<br>Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.</br>"
+					+ "<br>Vous pouvez la télécharger depuis <a href=\"http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html\">le site d'Oracle</a>.</br>";
+		} else {
+			ERROR_MESSAGE = "The version of your runtime environment (%s) is out of date.\n"
+					+ "To run, the application requires the version %s (or more) of Java.\n"
+					+ "You can download it from the Oracle site:\n"
+					+ "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html";
+
+			FORMATTED_ERROR_MESSAGE = "<br>The version of your runtime environment (%s) is out of date.</br>"
+					+ "<br>To run, the application requires the version %s (or more) of Java.</br>"
+					+ "<br>You can download it from <a href=\"http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html\">the Oracle site</a>.</br>";
+		}
 	}
 
 	public static Class<?> getApplicationClass() throws IOException, ClassNotFoundException {
