@@ -33,7 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 	public static final String REQUIRED_VERSION = "1.8.0_101"; // 1.8.0_40 JavaFX Dialogs, 1.8.0_101 Let's Encrypt compatibility
-	public static String ERROR_MESSAGE, FORMATTED_ERROR_MESSAGE;
+	public static String ERROR_MESSAGE_TITLE, ERROR_MESSAGE, FORMATTED_ERROR_MESSAGE;
 
 	public static void main(String[] args) throws Throwable {
 		ensureRequiredVersion();
@@ -45,7 +45,7 @@ public class Main {
 		if (getVersionValue(version) < getVersionValue(REQUIRED_VERSION)) {
 			loadLanguage();
 			if (!GraphicsEnvironment.isHeadless())
-				JOptionPane.showMessageDialog(null, new MessageWithLink(String.format(FORMATTED_ERROR_MESSAGE, version, REQUIRED_VERSION)), "JRE invalide", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, new MessageWithLink(String.format(FORMATTED_ERROR_MESSAGE, version, REQUIRED_VERSION)), ERROR_MESSAGE_TITLE, JOptionPane.ERROR_MESSAGE);
 			throw new RuntimeException(String.format(ERROR_MESSAGE, version, REQUIRED_VERSION));
 		}
 	}
@@ -70,7 +70,7 @@ public class Main {
 		double value = 0;
 		for (i = 0; i < versionParts.length; i++) {
 			try {
-				int part = Integer.valueOf(versionParts[i]);
+				int part = Integer.parseInt(versionParts[i]);
 				// The value of the part of the version is related to it's proximity to the beginning
 				// Multiply by 3 to "pad" each of the parts a bit more so a higher value
 				// of a less significant version part couldn't as easily outweight the
@@ -84,6 +84,8 @@ public class Main {
 
 	public static void loadLanguage() {
 		if ("fr".equals(System.getProperty("user.language"))) {
+			ERROR_MESSAGE_TITLE = "JRE invalide";
+
 			ERROR_MESSAGE = "La version de votre environnement d'éxecution (%s) n'est pas à jour.\n"
 					+ "Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.\n"
 					+ "Vous pouvez la télécharger depuis le site d'Oracle:\n"
@@ -93,6 +95,8 @@ public class Main {
 					+ "<br>Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.</br>"
 					+ "<br>Vous pouvez la télécharger depuis <a href=\"http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html\">le site d'Oracle</a>.</br>";
 		} else {
+			ERROR_MESSAGE_TITLE = "Invalid JRE";
+
 			ERROR_MESSAGE = "The version of your runtime environment (%s) is out of date.\n"
 					+ "To run, the application requires the version %s (or more) of Java.\n"
 					+ "You can download it from the Oracle site:\n"
