@@ -35,18 +35,17 @@ public class Main {
 	public static String ERROR_MESSAGE_TITLE, ERROR_MESSAGE, FORMATTED_ERROR_MESSAGE;
 
 	public static void main(String[] args) throws Throwable {
-		Info app = getApplicationInfo();
-		requireVersion(app.javaVersion);
-		launchApplication(app.main, args);
+		String[] info = getApplicationInfo();
+		requireVersion(info[1]);
+		launchApplication(Main.class.getClassLoader().loadClass(info[0]), args);
 	}
 
-	public static Info getApplicationInfo() throws IOException, ClassNotFoundException {
+	public static String[] getApplicationInfo() throws IOException {
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("/application.main")));
-			Class<?> main = Main.class.getClassLoader().loadClass(in.readLine());
-			String javaVersion = in.readLine();
-			return new Info(main, javaVersion == null ? "1.8.0_40" : javaVersion);
+			String main = in.readLine(), javaVersion = in.readLine();
+			return new String[]{main, javaVersion == null ? "1.8.0_40" : javaVersion};
 		} finally {
 			if (in != null)
 				in.close();
@@ -162,15 +161,5 @@ public class Main {
 				"font-weight:" + (font.isBold() ? "bold" : "normal") + ";" +
 				"font-size:" + font.getSize() + "pt;" +
 				"background-color: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ");";
-	}
-
-	public static class Info {
-		public final Class<?> main;
-		public final String javaVersion;
-
-		public Info(Class<?> main, String javaVersion) {
-			this.main = main;
-			this.javaVersion = javaVersion;
-		}
 	}
 }
