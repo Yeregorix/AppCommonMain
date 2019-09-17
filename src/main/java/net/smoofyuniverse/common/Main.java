@@ -32,21 +32,24 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 
 public class Main {
-	public static final String REQUIRED_VERSION = "1.8.0_101"; // 1.8.0_40 JavaFX Dialogs, 1.8.0_101 Let's Encrypt compatibility
 	public static String ERROR_MESSAGE_TITLE, ERROR_MESSAGE, FORMATTED_ERROR_MESSAGE;
 
 	public static void main(String[] args) throws Throwable {
-		ensureRequiredVersion();
-		launchApplication(getApplicationClass(), args);
+		AppInfo app = getApplicationInfo();
+		requireVersion(app.javaVersion);
+		launchApplication(app.main, args);
 	}
 
-	public static void ensureRequiredVersion() {
-		String version = getCurrentVersion();
-		if (getVersionValue(version) < getVersionValue(REQUIRED_VERSION)) {
-			loadLanguage();
-			if (!GraphicsEnvironment.isHeadless())
-				JOptionPane.showMessageDialog(null, createClickableMessage(String.format(FORMATTED_ERROR_MESSAGE, version, REQUIRED_VERSION)), ERROR_MESSAGE_TITLE, JOptionPane.ERROR_MESSAGE);
-			throw new RuntimeException(String.format(ERROR_MESSAGE, version, REQUIRED_VERSION));
+	public static AppInfo getApplicationInfo() throws IOException, ClassNotFoundException {
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("/application.main")));
+			Class<?> main = Main.class.getClassLoader().loadClass(in.readLine());
+			String javaVersion = in.readLine();
+			return new AppInfo(main, javaVersion == null ? "1.8.0_40" : javaVersion);
+		} finally {
+			if (in != null)
+				in.close();
 		}
 	}
 
@@ -108,14 +111,13 @@ public class Main {
 		}
 	}
 
-	public static Class<?> getApplicationClass() throws IOException, ClassNotFoundException {
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("/application.main")));
-			return Main.class.getClassLoader().loadClass(in.readLine());
-		} finally {
-			if (in != null)
-				in.close();
+	public static void requireVersion(String requiredVersion) {
+		String version = getCurrentVersion();
+		if (getVersionValue(version) < getVersionValue(requiredVersion)) {
+			loadLanguage();
+			if (!GraphicsEnvironment.isHeadless())
+				JOptionPane.showMessageDialog(null, createClickableMessage(String.format(FORMATTED_ERROR_MESSAGE, version, requiredVersion)), ERROR_MESSAGE_TITLE, JOptionPane.ERROR_MESSAGE);
+			throw new RuntimeException(String.format(ERROR_MESSAGE, version, requiredVersion));
 		}
 	}
 
@@ -160,5 +162,15 @@ public class Main {
 				"font-weight:" + (font.isBold() ? "bold" : "normal") + ";" +
 				"font-size:" + font.getSize() + "pt;" +
 				"background-color: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ");";
+	}
+
+	public static class AppInfo {
+		public final Class<?> main;
+		public final String javaVersion;
+
+		public AppInfo(Class<?> main, String javaVersion) {
+			this.main = main;
+			this.javaVersion = javaVersion;
+		}
 	}
 }
