@@ -45,7 +45,7 @@ public class Main {
 		if (getVersionValue(version) < getVersionValue(REQUIRED_VERSION)) {
 			loadLanguage();
 			if (!GraphicsEnvironment.isHeadless())
-				JOptionPane.showMessageDialog(null, new MessageWithLink(String.format(FORMATTED_ERROR_MESSAGE, version, REQUIRED_VERSION)), ERROR_MESSAGE_TITLE, JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, createClickableMessage(String.format(FORMATTED_ERROR_MESSAGE, version, REQUIRED_VERSION)), ERROR_MESSAGE_TITLE, JOptionPane.ERROR_MESSAGE);
 			throw new RuntimeException(String.format(ERROR_MESSAGE, version, REQUIRED_VERSION));
 		}
 	}
@@ -128,35 +128,37 @@ public class Main {
 		}
 	}
 
-	public static class MessageWithLink extends JEditorPane {
-		private static final long serialVersionUID = 1L;
+	public static JEditorPane createClickableMessage(String htmlBody) {
+		JEditorPane pane = new JEditorPane();
 
-		public MessageWithLink(String htmlBody) {
-			super("text/html", "<html><body style=\"" + getStyle() + "\">" + htmlBody + "</body></html>");
-			addHyperlinkListener(new HyperlinkListener() {
-				@Override
-				public void hyperlinkUpdate(HyperlinkEvent ev) {
-					if (ev.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-						try {
-							Desktop.getDesktop().browse(ev.getURL().toURI());
-						} catch (Exception ignored) {
-						}
+		pane.setContentType("text/html");
+		pane.setText("<html><body style=\"" + getStyle() + "\">" + htmlBody + "</body></html>");
+
+		pane.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent ev) {
+				if (ev.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+					try {
+						Desktop.getDesktop().browse(ev.getURL().toURI());
+					} catch (Exception ignored) {
 					}
 				}
-			});
-			setEditable(false);
-			setBorder(null);
-		}
+			}
+		});
 
-		private static String getStyle() {
-			JLabel label = new JLabel();
-			Font font = label.getFont();
-			Color color = label.getBackground();
+		pane.setEditable(false);
+		pane.setBorder(null);
+		return pane;
+	}
 
-			return "font-family:" + font.getFamily() + ";" +
-					"font-weight:" + (font.isBold() ? "bold" : "normal") + ";" +
-					"font-size:" + font.getSize() + "pt;" +
-					"background-color: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ");";
-		}
+	private static String getStyle() {
+		JLabel label = new JLabel();
+		Font font = label.getFont();
+		Color color = label.getBackground();
+
+		return "font-family:" + font.getFamily() + ";" +
+				"font-weight:" + (font.isBold() ? "bold" : "normal") + ";" +
+				"font-size:" + font.getSize() + "pt;" +
+				"background-color: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ");";
 	}
 }
