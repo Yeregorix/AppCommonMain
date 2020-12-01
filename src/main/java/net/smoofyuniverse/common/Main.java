@@ -66,21 +66,18 @@ public class Main {
 		// Replace underscores with periods for easier String splitting
 		version = version.replace('_', '.');
 
-		// Split the version up into parts
-		String[] versionParts = version.split("\\.");
-
 		double value = 0;
-		for (i = 0; i < versionParts.length; i++) {
+		double weight = 1;
+		for (String part : version.split("\\.")) {
 			try {
-				int part = Integer.parseInt(versionParts[i]);
 				// The value of the part of the version is related to it's proximity to the beginning
-				// Multiply by 3 to "pad" each of the parts a bit more so a higher value
-				// of a less significant version part couldn't as easily outweight the
-				// more significant version parts.
-				value += part * Math.pow(10, versionParts.length - (i - 1) * 3);
+				value += Integer.parseInt(part) * weight;
 			} catch (NumberFormatException ignored) {
 			}
+
+			weight /= 1000;
 		}
+
 		return value;
 	}
 
