@@ -29,10 +29,21 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 	public static String ERROR_MESSAGE_TITLE, ERROR_MESSAGE, FORMATTED_ERROR_MESSAGE;
+
+	private static Instrumentation instrumentation;
+
+	public static void agentmain(String args, Instrumentation inst) {
+		instrumentation = inst;
+	}
+
+	public static Instrumentation getInstrumentation() {
+		return instrumentation;
+	}
 
 	public static void main(String[] args) throws Throwable {
 		String[] info = getApplicationInfo();
