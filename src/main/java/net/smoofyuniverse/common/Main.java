@@ -83,27 +83,27 @@ public class Main {
 
 	public static void loadLanguage() {
 		if ("fr".equals(System.getProperty("user.language"))) {
-			ERROR_MESSAGE_TITLE = "JRE invalide";
+			ERROR_MESSAGE_TITLE = "Version de Java invalide";
 
 			ERROR_MESSAGE = "La version de votre environnement d'éxecution (%s) n'est pas à jour.\n"
 					+ "Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.\n"
-					+ "Vous pouvez la télécharger depuis le site d'Oracle:\n"
-					+ "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html";
+					+ "Vous pouvez la télécharger depuis le site AdoptOpenJDK:\n"
+					+ "https://adoptopenjdk.net/";
 
 			FORMATTED_ERROR_MESSAGE = "<br>La version de votre environnement d'éxecution (%s) n'est pas à jour.</br>"
 					+ "<br>Pour fonctionner, l'application nécessite la version %s (ou plus) de Java.</br>"
-					+ "<br>Vous pouvez la télécharger depuis <a href=\"http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html\">le site d'Oracle</a>.</br>";
+					+ "<br>Vous pouvez la télécharger depuis <a href=\"https://adoptopenjdk.net/\">le site AdoptOpenJDK</a>.</br>";
 		} else {
-			ERROR_MESSAGE_TITLE = "Invalid JRE";
+			ERROR_MESSAGE_TITLE = "Invalid Java version";
 
 			ERROR_MESSAGE = "The version of your runtime environment (%s) is out of date.\n"
 					+ "To run, the application requires the version %s (or more) of Java.\n"
-					+ "You can download it from the Oracle site:\n"
-					+ "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html";
+					+ "You can download it from AdoptOpenJDK site:\n"
+					+ "https://adoptopenjdk.net/";
 
 			FORMATTED_ERROR_MESSAGE = "<br>The version of your runtime environment (%s) is out of date.</br>"
 					+ "<br>To run, the application requires the version %s (or more) of Java.</br>"
-					+ "<br>You can download it from <a href=\"http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html\">the Oracle site</a>.</br>";
+					+ "<br>You can download it from <a href=\"https://adoptopenjdk.net/\">AdoptOpenJDK site</a>.</br>";
 		}
 	}
 
