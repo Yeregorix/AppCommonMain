@@ -129,7 +129,7 @@ public class Main {
 	}
 
 	public static void launchApplication(Class<?> main, String[] args) throws Throwable {
-		System.out.println("Launching application " + main.getName() + " ..");
+		System.out.println("Launching application " + main.getName() + " ...");
 		try {
 			main.getMethod("main", String[].class).invoke(null, new Object[] { args });
 		} catch (InvocationTargetException e) {
